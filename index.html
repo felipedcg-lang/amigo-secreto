@@ -1,6 +1,290 @@
-<!doctype html>
-<meta charset="utf-8">
-<title>Test</title>
-<h1>Funciona 🎉</h1>
-<p>Si ves este texto con formato HTML, Pages ya sirve <b>text/html</b>.</p>
-Crear index.html de prueba
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Amigo Secreto – Sorteo</title>
+  <style>
+    :root{
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-2: #1f2937;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --primary: #22c55e;
+      --primary-2:#16a34a;
+      --accent: #38bdf8;
+      --danger: #ef4444;
+      --ring: #93c5fd;
+      --shadow: 0 10px 25px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; 
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Inter,Ubuntu,Cantarell,"Noto Sans",sans-serif;
+      background: radial-gradient(1200px 800px at 80% -10%, #0ea5e9 0%, transparent 50%),
+                  radial-gradient(900px 600px at -10% 100%, #22c55e 0%, transparent 50%),
+                  var(--bg);
+      color:var(--text);
+      min-height:100dvh; 
+      display:grid; 
+      place-items:center; 
+      padding:24px;
+    }
+    .app{
+      width:100%; 
+      max-width:850px; 
+      background:linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+      border-radius: var(--radius); 
+      box-shadow: var(--shadow); 
+      overflow:hidden; 
+      border:1px solid rgba(255,255,255,.08);
+    }
+    header{ padding:28px 28px 0; }
+    .title{display:flex; align-items:center; gap:12px;}
+    .title h1{margin:0; font-size: clamp(1.2rem, 1.6vw + .8rem, 2rem); letter-spacing:.2px}
+    .badge{
+      font-size:.8rem; 
+      color:#052e16; 
+      background:linear-gradient(90deg,#86efac,#a7f3d0);
+      padding:4px 10px; 
+      border-radius:999px; 
+      font-weight:700
+    }
+    .card{ padding:24px 28px 32px; display:grid; gap:18px}
+    .row{ display:grid; grid-template-columns: 1fr auto; gap:12px; align-items:center }
+    .input{ 
+      width:100%; 
+      background:#0b1220; 
+      border:1px solid rgba(255,255,255,.12); 
+      border-radius:14px; 
+      padding:14px 16px;
+      color:var(--text); 
+      font-size:1rem; 
+      outline:none; 
+      box-shadow: inset 0 0 0 1px transparent; 
+    }
+    .input:focus{ 
+      border-color:transparent; 
+      box-shadow: 0 0 0 3px var(--ring) 
+    }
+    .btn{ 
+      border:0; 
+      cursor:pointer; 
+      padding:12px 16px; 
+      border-radius:14px; 
+      font-weight:700; 
+      background:linear-gradient(180deg, var(--primary) 0%, var(--primary-2) 100%); 
+      color:#062e0e;
+      box-shadow: 0 4px 14px rgba(34,197,94,.35); 
+      transition:.2s transform ease, .2s filter ease 
+    }
+    .btn:hover{ transform: translateY(-1px); filter:brightness(1.05) }
+    .btn.secondary{ 
+      background: linear-gradient(180deg,#60a5fa,#3b82f6); 
+      color:#061b3b; 
+      box-shadow:0 4px 14px rgba(59,130,246,.35) 
+    }
+    .btn.ghost{ 
+      background: transparent; 
+      color: var(--muted); 
+      border:1px dashed rgba(255,255,255,.18) 
+    }
+    .helper{ font-size:.92rem; color: var(--muted) }
+    .list{
+      display:flex; 
+      flex-wrap:wrap; 
+      gap:10px; 
+      padding:0; 
+      margin:0; 
+      list-style:none
+    }
+    .chip{ 
+      background: rgba(56,189,248,.12); 
+      border:1px solid rgba(56,189,248,.35); 
+      color:#e0f2fe;
+      padding:8px 12px; 
+      border-radius:999px; 
+      display:inline-flex; 
+      align-items:center; 
+      gap:8px 
+    }
+    .chip button{ 
+      all:unset; 
+      cursor:pointer; 
+      display:inline-grid; 
+      place-items:center; 
+      width:18px; 
+      height:18px; 
+      border-radius:9px; 
+      background:rgba(255,255,255,.12) 
+    }
+    .chip button:hover{ background:rgba(255,255,255,.2) }
+    .empty{
+      border:1.5px dashed rgba(255,255,255,.18); 
+      border-radius:14px; 
+      padding:18px; 
+      color:var(--muted); 
+      text-align:center
+    }
+    .result{
+      background: rgba(34,197,94,.08); 
+      border: 1px solid rgba(34,197,94,.35); 
+      color:#dcfce7; 
+      padding:16px; 
+      border-radius:14px; 
+      font-size:1.05rem;
+    }
+    .result strong{ font-size:1.2rem }
+    footer{ 
+      padding:0 28px 24px; 
+      color:var(--muted); 
+      display:flex; 
+      justify-content:space-between; 
+      align-items:center; 
+      gap:10px; 
+      flex-wrap:wrap 
+    }
+    .sr-only{
+      position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0
+    }
+  </style>
+</head>
+<body>
+  <main class="app" role="application" aria-labelledby="app-title">
+    <header>
+      <div class="title">
+        <h1 id="app-title">Sorteo de <em>Amigo Secreto</em></h1>
+        <span class="badge" aria-hidden="true">Versión ligera</span>
+      </div>
+    </header>
+
+    <section class="card" aria-labelledby="sec-entrada">
+      <h2 id="sec-entrada" class="sr-only">Agregar y listar amigos</h2>
+      <div class="row">
+        <input id="nombre" class="input" type="text" autocomplete="off" placeholder="Escribe un nombre y presiona Enter o ‘Adicionar’" aria-describedby="ayuda" />
+        <button id="btnAdd" class="btn" type="button">Adicionar</button>
+      </div>
+      <p id="ayuda" class="helper">Consejo: evita repeticiones y usa nombres reales. Puedes borrar cualquiera haciendo clic en ×.</p>
+
+      <ul id="lista" class="list" aria-live="polite" aria-label="Lista de nombres"></ul>
+      <div id="placeholder" class="empty" role="status">Aún no hay nombres. ¡Agrega al menos 2 para sortear!</div>
+
+      <div class="row">
+        <button id="btnSortear" class="btn secondary" type="button" disabled>Sortear Amigo</button>
+        <button id="btnLimpiar" class="btn ghost" type="button">Limpiar lista</button>
+      </div>
+
+      <div id="resultado" class="result" aria-live="assertive" hidden>
+        Resultado: <strong id="ganador"></strong>
+      </div>
+    </section>
+
+    <footer>
+      <span>Hecho con ❤️ y <span aria-label="azar real">Math.random()</span>.</span>
+      <small>Accesible: navegación con teclado, mensajes en vivo y validación básica.</small>
+    </footer>
+  </main>
+
+  <script>
+    const $nombre = document.querySelector('#nombre');
+    const $lista = document.querySelector('#lista');
+    const $placeholder = document.querySelector('#placeholder');
+    const $btnAdd = document.querySelector('#btnAdd');
+    const $btnSortear = document.querySelector('#btnSortear');
+    const $btnLimpiar = document.querySelector('#btnLimpiar');
+    const $resultado = document.querySelector('#resultado');
+    const $ganador = document.querySelector('#ganador');
+
+    let amigos = [];
+
+    function render(){
+      $lista.innerHTML = '';
+      amigos.forEach((nombre, idx) => {
+        const li = document.createElement('li');
+        li.className = 'chip';
+        li.innerHTML = `<span>${escapeHtml(nombre)}</span>`;
+        const del = document.createElement('button');
+        del.setAttribute('type','button');
+        del.setAttribute('aria-label', `Eliminar ${nombre}`);
+        del.innerHTML = '&times;';
+        del.addEventListener('click', () => {
+          amigos.splice(idx,1);
+          render();
+        });
+        li.appendChild(del);
+        $lista.appendChild(li);
+      });
+
+      const hay = amigos.length > 0;
+      $placeholder.style.display = hay ? 'none' : 'block';
+      $btnSortear.disabled = amigos.length < 2;
+
+      if ($resultado && !$resultado.hidden) {
+        $resultado.hidden = true;
+        $ganador.textContent = '';
+      }
+    }
+
+    function escapeHtml(str){
+      return str.replace(/[&<>\"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;','\'':'&#39;'}[m]));
+    }
+
+    function agregar(){
+      const valor = ($nombre.value || '').trim();
+      if (!valor){
+        alert('Por favor ingresa un nombre válido.');
+        $nombre.focus();
+        return;
+      }
+      const existe = amigos.some(n => n.toLowerCase() === valor.toLowerCase());
+      if (existe){
+        alert('Ese nombre ya está en la lista.');
+        $nombre.select();
+        return;
+      }
+      amigos.push(valor);
+      $nombre.value = '';
+      $nombre.focus();
+      render();
+    }
+
+    function sortear(){
+      if (amigos.length < 2){
+        alert('Agrega al menos 2 nombres para sortear.');
+        return;
+      }
+      const idx = Math.floor(Math.random() * amigos.length);
+      const elegido = amigos[idx];
+      $ganador.textContent = elegido;
+      $resultado.hidden = false;
+      $resultado.animate([
+        { transform: 'scale(0.96)', opacity: .5 },
+        { transform: 'scale(1)', opacity: 1 }
+      ], { duration: 200, easing: 'ease-out' });
+    }
+
+    function limpiar(){
+      if (amigos.length === 0) return;
+      const ok = confirm('¿Seguro que quieres limpiar toda la lista?');
+      if (!ok) return;
+      amigos = [];
+      render();
+      $nombre.focus();
+    }
+
+    $btnAdd.addEventListener('click', agregar);
+    $btnSortear.addEventListener('click', sortear);
+    $btnLimpiar.addEventListener('click', limpiar);
+    $nombre.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter'){
+        e.preventDefault();
+        agregar();
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>
